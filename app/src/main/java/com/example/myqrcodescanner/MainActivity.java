@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tempResultTextView, textView3;
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
+    private ImageAnalysis imageAnalysis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (imageAnalysis != null) {
+            resetImageAnalyzer();
+        }
+    }
+
     private void startCamera(){
         cameraProviderFuture.addListener(() -> {
             try {
@@ -84,14 +94,21 @@ public class MainActivity extends AppCompatActivity {
 
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
-        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
+        imageAnalysis = new ImageAnalysis.Builder()
                 .setTargetResolution(new Size(720, 1280))
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build();
 
+        resetImageAnalyzer();
+
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageAnalysis, preview);
+    }
+
+    private void resetImageAnalyzer() {
         imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this), new QRCodeImageAnalyzer(new QRCodeFoundListener() {
             @Override
             public void onQRCodeFound(String qrCodeResult) {
+                imageAnalysis.clearAnalyzer();
                 tempResultTextView.setText(qrCodeResult);
 
                 try {
@@ -110,7 +127,5 @@ public class MainActivity extends AppCompatActivity {
                 tempResultTextView.setText("Letakkan kamera di depan kode QR");
             }
         }));
-
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageAnalysis, preview);
     }
 }
