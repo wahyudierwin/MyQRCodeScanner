@@ -1,9 +1,13 @@
 package com.example.myqrcodescanner;
 
-public class QRCodeResultAnalyzer {
+public class QRCodeResult {
     private String qrCodeResult;
-    public QRCodeResultAnalyzer(String _qrCodeResult){
+    public QRCodeResult(String _qrCodeResult){
         this.qrCodeResult = _qrCodeResult;
+    }
+
+    public String getResult(){
+        return this.qrCodeResult;
     }
 
     public boolean isLink(){
@@ -11,6 +15,6 @@ public class QRCodeResultAnalyzer {
     }
 
     private boolean _isLink(String _qrCodeResult){
-        return false;
+        return true;
     }
 }
