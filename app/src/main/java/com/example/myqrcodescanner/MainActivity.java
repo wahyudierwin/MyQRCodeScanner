@@ -2,6 +2,13 @@ package com.example.myqrcodescanner;
 
 import static android.Manifest.permission.CAMERA;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.util.Size;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
@@ -14,13 +21,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.util.Size;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.ExecutionException;
@@ -28,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private PreviewView previewView;
-    private TextView tempResultTextView, textView3;
+    private TextView instructionTextView;
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     private ImageAnalysis imageAnalysis;
@@ -39,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         previewView = findViewById(R.id.previewView);
-        tempResultTextView = findViewById(R.id.tempResultTextView);
-        textView3 = findViewById(R.id.textView3);
+        instructionTextView = findViewById(R.id.instructionTextView);
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         requestPermissions();
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onQRCodeFound(String qrCodeResult) {
                 imageAnalysis.clearAnalyzer();
-                tempResultTextView.setText(qrCodeResult);
+                instructionTextView.setText(qrCodeResult);
 
                 try {
                     Intent intent = new Intent(MainActivity.this, ResultActivity.class);
@@ -118,13 +117,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch (Exception e){
                     String err = "Failed to start intent: " + e;
-                    textView3.setText(err);
+                    instructionTextView.setText(err);
                 }
             }
 
             @Override
             public void qrCodeNotFound() {
-                tempResultTextView.setText("Letakkan kamera di depan kode QR");
+                instructionTextView.setText("Letakkan kamera di depan kode QR");
             }
         }));
     }

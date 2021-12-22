@@ -14,7 +14,7 @@
     </androidx.camera.view.PreviewView>
 
     <TextView
-        android:id="@+id/tempResultTextView"
+        android:id="@+id/instructionTextView"
         android:layout_width="match_parent"
         android:layout_height="59dp"
         android:layout_gravity="center_horizontal|center_vertical"
@@ -27,18 +27,6 @@
         android:translationZ="100dp"
         android:visibility="visible"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="16sp"
-        android:textColor="#10FFFF"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:foregroundGravity="center_vertical|center_horizontal"
-        android:gravity="center_horizontal|center_vertical"
-        app:layout_constraintTop_toBottomOf="@id/tempResultTextView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
