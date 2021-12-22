@@ -1,6 +1,7 @@
 package com.example.myqrcodescanner;
 
-import android.util.Patterns;
+
+import androidx.core.util.PatternsCompat;
 
 public class QRCodeResult {
     private String result;
@@ -13,7 +14,7 @@ public class QRCodeResult {
     }
 
     public boolean isLink() {
-        if (Patterns.WEB_URL.matcher(this.result).matches()) return true;
+        if (PatternsCompat.WEB_URL.matcher(this.result).matches()) return true;
         else return false;
     }
 }

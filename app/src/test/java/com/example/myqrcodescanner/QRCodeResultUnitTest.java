@@ -13,7 +13,7 @@ public class QRCodeResultUnitTest {
     }
 
     @Test
-    public void isLink_simpleLink() {
+    public void test_isLink_simpleLink() {
         QRCodeResult theTest = new QRCodeResult("https://www.google.com");
         assertTrue(theTest.isLink());
     }
