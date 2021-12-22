@@ -13,10 +13,6 @@ public class QRCodeResult {
     }
 
     public boolean isLink() {
-//        if (URLUtil.isValidUrl(_result)) {
-//            return true;
-//        }
-//        return false;
         if (Patterns.WEB_URL.matcher(this.result).matches()) return true;
         else return false;
     }
