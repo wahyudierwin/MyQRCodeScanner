@@ -1,27 +1,34 @@
 package com.example.myqrcodescanner;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 public class ResultActivity extends AppCompatActivity {
     private TextView resultTextView;
-    private Button goToLinkButton;
+    private Button openLinkButton;
     private QRCodeResult qrCodeResult;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
         resultTextView = findViewById(R.id.resultTextView);
-        goToLinkButton = findViewById(R.id.goToLinkButton);
+        openLinkButton = findViewById(R.id.openLinkButton);
+
+        loadTheAd();
 
         try {
             Intent intent = getIntent();
@@ -36,6 +43,19 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
+    private void loadTheAd(){
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+
+            }
+        });
+
+        AdView adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -46,22 +66,22 @@ public class ResultActivity extends AppCompatActivity {
         qrCodeResult = new QRCodeResult(qrCodeResultStr);
 
         if (qrCodeResult.isLink()){
-            displayGoToLinkButton();
+            displayOpenLinkButton();
 
-            goToLinkButton.setOnClickListener(new View.OnClickListener() {
+            openLinkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    goToLink(qrCodeResult);
+                    openLink(qrCodeResult);
                 }
             });
         }
     }
 
-    private void displayGoToLinkButton(){
-        goToLinkButton.setVisibility(View.VISIBLE);
+    private void displayOpenLinkButton(){
+        openLinkButton.setVisibility(View.VISIBLE);
     }
 
-    private void goToLink(QRCodeResult qrCodeResult){
+    private void openLink(QRCodeResult qrCodeResult){
         Intent intent = new Intent(getApplicationContext(), WebViewActivity.class);
         intent.putExtra("link", qrCodeResult.getResult());
         startActivity(intent);
