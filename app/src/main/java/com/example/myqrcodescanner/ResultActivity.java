@@ -18,7 +18,6 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 public class ResultActivity extends AppCompatActivity {
     private TextView resultTextView;
     private Button openLinkButton;
-    private QRCodeResult qrCodeResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +35,8 @@ public class ResultActivity extends AppCompatActivity {
             if (extras != null) {
                 String qrCodeResultStr = extras.getString("qrCodeResult");
                 resultTextView.setText(qrCodeResultStr);
+
+                analyze(qrCodeResultStr);
             }
         }
         catch (Exception e) {
@@ -56,14 +57,8 @@ public class ResultActivity extends AppCompatActivity {
         adView.loadAd(adRequest);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        analyze(resultTextView.getText().toString());
-    }
-
     private void analyze(String qrCodeResultStr){
-        qrCodeResult = new QRCodeResult(qrCodeResultStr);
+        QRCodeResult qrCodeResult = new QRCodeResult(qrCodeResultStr);
 
         if (qrCodeResult.isLink()){
             displayOpenLinkButton();
