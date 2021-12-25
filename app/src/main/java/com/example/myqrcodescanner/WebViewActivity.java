@@ -19,18 +19,18 @@ public class WebViewActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String linkResult = extras.getString("link");
-            displayPage(linkResult);
+            String link = extras.getString("link");
+            displayPage(link);
         }
     }
 
-    private void displayPage(String linkResult){
+    private void displayPage(String link){
         resultWebView.setWebViewClient(new MyWebViewClient());
         resultWebView
                 .getSettings()
                 .setJavaScriptEnabled(true);
 
-        resultWebView.loadUrl(linkResult);
+        resultWebView.loadUrl(link);
     }
 
     public class MyWebViewClient extends WebViewClient{

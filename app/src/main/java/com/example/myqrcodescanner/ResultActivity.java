@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.PatternsCompat;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -33,10 +34,10 @@ public class ResultActivity extends AppCompatActivity {
             Intent intent = getIntent();
             Bundle extras = intent.getExtras();
             if (extras != null) {
-                String qrCodeResultStr = extras.getString("qrCodeResult");
-                resultTextView.setText(qrCodeResultStr);
+                String qrCodeResult = extras.getString("qrCodeResult");
+                resultTextView.setText(qrCodeResult);
 
-                analyze(qrCodeResultStr);
+                analyze(qrCodeResult);
             }
         }
         catch (Exception e) {
@@ -57,10 +58,8 @@ public class ResultActivity extends AppCompatActivity {
         adView.loadAd(adRequest);
     }
 
-    private void analyze(String qrCodeResultStr){
-        QRCodeResult qrCodeResult = new QRCodeResult(qrCodeResultStr);
-
-        if (qrCodeResult.isLink()){
+    private void analyze(String qrCodeResult){
+        if (isLink(qrCodeResult)){
             displayOpenLinkButton();
 
             openLinkButton.setOnClickListener(new View.OnClickListener() {
@@ -72,13 +71,18 @@ public class ResultActivity extends AppCompatActivity {
         }
     }
 
+    static boolean isLink(String qrCodeResult){
+        return PatternsCompat.WEB_URL.matcher(qrCodeResult).matches();
+    }
+
     private void displayOpenLinkButton(){
         openLinkButton.setVisibility(View.VISIBLE);
     }
 
-    private void openLink(QRCodeResult qrCodeResult){
+    private void openLink(String qrCodeResult){
         Intent intent = new Intent(getApplicationContext(), WebViewActivity.class);
-        intent.putExtra("link", qrCodeResult.getResult());
+        intent.putExtra("link", qrCodeResult);
         startActivity(intent);
     }
 }
+
