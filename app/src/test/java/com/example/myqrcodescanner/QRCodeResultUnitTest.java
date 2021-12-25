@@ -9,14 +9,14 @@ public class QRCodeResultUnitTest {
 
     @Test
     public void isLink_should_return_true_for_ugm() {
-        boolean result = ResultActivity.isLink("ugm");
+        boolean result = ResultActivity.isLink("ugm.ac.id");
 
         assertTrue(result);
     }
 
     @Test
     public void test_isLink_firstLink() {
-        assertTrue(ResultActivity.isLink("ugm"));
+        assertTrue(ResultActivity.isLink("ugm.ac.id"));
     }
 
     @Test
